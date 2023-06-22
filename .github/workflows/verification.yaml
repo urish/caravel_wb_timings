@@ -53,3 +53,11 @@ jobs:
           CORE_VERILOG_PATH: ${{ github.workspace }}/caravel/mgmt_core_wrapper/verilog
           GCC_PATH: ${{ github.workspace }}/riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14/bin/
           GCC_PREFIX: riscv64-unknown-elf
+
+      - name: Upload VCD
+        uses: actions/upload-artifact@v3
+        with:
+          name: vcd
+          path: |
+            - timings_test_tb.vcd
+            - timings_test_tb.gtwk
