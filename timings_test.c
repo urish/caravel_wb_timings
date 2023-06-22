@@ -17,6 +17,7 @@
 
 #include <defs.h>
 #include <stub.c>
+#include "irq_vex.h"
 
 #define SET(PIN,N) (PIN |=  (1<<N))
 #define CLR(PIN,N) (PIN &= ~(1<<N))
@@ -26,6 +27,7 @@
 
 #define reg_io_test            (*(volatile uint32_t*)0x30000000)
 
+extern uint16_t flag;
 
 volatile uint32_t buf[8] = {0xf0f01234, 0xf0f05678};
 
@@ -33,6 +35,14 @@ __attribute__ ((section (".data"))) void test_write_data() {
     int idx = 0;
     reg_io_test = buf[idx++];
     reg_io_test = buf[idx++];
+}
+
+__attribute__ ((section (".data"))) void test_irq() {
+    flag = 0;
+    irq_setie(1);
+    // This should trigger the interrupt
+    reg_io_test = 0xbeef0000;
+    while (flag == 0);
 }
 
 void main()
@@ -98,11 +108,17 @@ void main()
     reg_spi_enable = 1;
     reg_wb_enable = 1;
 
+    irq_setmask(irq_getmask() | (1 << USER_IRQ_0_INTERRUPT));
+    reg_user0_irq_en = 1;
+    reg_user_irq_enable |=0x1;
+
     /* Apply configuration */
     reg_mprj_xfer = 1;
     while (reg_mprj_xfer == 1);
 
     test_write_data();
+
+    test_irq();
 
 	reg_mprj_datah |= 1 << FW_READY;
 }

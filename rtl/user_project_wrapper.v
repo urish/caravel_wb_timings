@@ -78,7 +78,7 @@ module user_project_wrapper (
 	input  wire user_clock2,
 
 	// User maskable interrupt signals
-	output wire [2:0] user_irq
+	output reg [2:0] user_irq
 );
 
 	assign io_out[0] = io_in[0];
@@ -90,13 +90,18 @@ module user_project_wrapper (
 			counter <= 0;
 			wbs_ack_o <= 0;
 			wbs_dat_o <= 0;
+			user_irq <= 0;
     end else begin
 			if (wbs_ack_o) begin
 			   wbs_ack_o <= 0;
+				 user_irq[0] <= 0;
 			end else 
 			if (wbs_stb_i && wbs_cyc_i && wbs_we_i) begin
       	counter <= wbs_dat_i;
 			   wbs_ack_o <= 1;
+				 if (wbs_dat_i == 32'hbeef0000) begin
+					 user_irq[0] <= 1;
+				 end
 			end
     end
   end

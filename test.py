@@ -26,4 +26,4 @@ async def test_start(dut):
     await ClockCycles(dut.clk, 80)
     dut.RSTB.value = 1
 
-    await with_timeout(RisingEdge(dut.fw_ready), 1100, 'us')
+    await with_timeout(RisingEdge(dut.fw_ready), 2000, 'us')
