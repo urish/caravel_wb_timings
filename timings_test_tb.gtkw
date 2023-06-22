@@ -1,0 +1,44 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Thu Jun 22 15:22:01 2023
+[*]
+[dumpfile] "/home/uri/p/caravel_wb_timings/timings_test_tb.vcd"
+[dumpfile_mtime] "Thu Jun 22 15:20:09 2023"
+[dumpfile_size] 751173
+[savefile] "/home/uri/p/caravel_wb_timings/timings_test_tb.gtkw"
+[timestart] 810920000
+[size] 1908 999
+[pos] -1 -1
+*-23.944731 853380000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] timings_test_tb.
+[treeopen] timings_test_tb.uut.
+[treeopen] timings_test_tb.uut.soc.
+[treeopen] timings_test_tb.uut.soc.core.
+[sst_width] 516
+[signals_width] 246
+[sst_expanded] 1
+[sst_vpaned_height] 292
+@28
+timings_test_tb.clk
+timings_test_tb.fw_ready
+@200
+-
+@28
+timings_test_tb.uut.mprj.wbs_cyc_i
+timings_test_tb.uut.mprj.wbs_stb_i
+timings_test_tb.uut.mprj.wbs_we_i
+@22
+timings_test_tb.uut.mprj.wbs_adr_i[31:0]
+timings_test_tb.uut.mprj.wbs_dat_i[31:0]
+@28
+timings_test_tb.uut.mprj.wbs_ack_o
+@22
+timings_test_tb.uut.mprj.wbs_dat_o[31:0]
+@23
+timings_test_tb.uut.mprj.counter[31:0]
+@200
+-
+@22
+timings_test_tb.uut.soc.core.VexRiscv.memory_PC[31:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,0 +1,9 @@
+__pycache__
+*.elf
+*.hex
+*.hexe
+*.vcd
+*.vcd.hier
+results.xml
+sim.vvp
+env.local.sh
