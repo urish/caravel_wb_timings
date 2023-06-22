@@ -1,0 +1,55 @@
+name: verification
+# either manually started, or on a schedule
+on: [push, workflow_dispatch, pull_request]
+jobs:
+  verification:
+    env:
+      SKY130_PDK_VERSION: 12df12e2e74145e31c5a13de02f9a1e176b56e67
+      PDK_ROOT: /home/runner/pdk
+      MPW_TAG: mpw-9a
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+
+      - name: Clone caravel
+        uses: actions/checkout@v3
+        with:
+          repository: efabless/caravel-lite
+          ref: ${{ env.MPW_TAG }}
+          path: caravel
+
+      - name: Install sky130A PDK
+        uses: TinyTapeOut/volare-action@v1
+        with:
+          pdk_version: ${{ env.SKY130_PDK_VERSION }}
+          pdk_root: ${{ env.PDK_ROOT }}
+
+      - name: Install management core wrapper
+        working-directory: caravel
+        run: make install_mcw
+
+      - name: Install RISC-V GCC
+        run: |
+          wget https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14.tar.gz
+          tar -xzf riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14.tar.gz
+
+      # Set Python up
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+
+      - name: install iverilog
+        run: sudo apt-get update && sudo apt-get install -y iverilog
+
+      - name: Caravel simulations
+        run: make coco_test
+        env:
+          DESIGNS: ${{ github.workspace }}
+          MCW_ROOT: ${{ github.workspace }}/caravel/mgmt_core_wrapper
+          CORE_VERILOG_PATH: ${{ github.workspace }}/caravel/mgmt_core_wrapper/verilog
+          GCC_PATH: ${{ github.workspace }}/riscv64-unknown-elf-gcc-8.3.0-2020.04.1-x86_64-linux-ubuntu14/bin/
+          GCC_PREFIX: riscv64-unknown-elf
